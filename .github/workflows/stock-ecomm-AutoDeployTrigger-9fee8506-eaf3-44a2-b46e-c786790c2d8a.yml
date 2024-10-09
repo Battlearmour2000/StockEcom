@@ -1,0 +1,48 @@
+name: Trigger auto deployment for stock-ecomm
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ Jainick2 ]
+    paths:
+    - '**'
+    - '.github/workflows/stock-ecomm-AutoDeployTrigger-9fee8506-eaf3-44a2-b46e-c786790c2d8a.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.STOCKECOMM_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.STOCKECOMM_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.STOCKECOMM_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          registryUrl: docker.io
+          registryUsername: ${{ secrets.STOCKECOMM_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.STOCKECOMM_REGISTRY_PASSWORD }}
+          containerAppName: stock-ecomm
+          resourceGroup: DefaultResourceGroup-EUS
+          imageToBuild: battlearmour2000/stock-ecomm:${{ github.sha }}
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
+
+
