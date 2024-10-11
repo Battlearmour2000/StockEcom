@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from django.conf import settings
+
 
 # Load .env file
 load_dotenv()  # This loads environment variables from the .env file
@@ -30,7 +32,12 @@ SECRET_KEY = 'django-insecure-wd12)3xu^923%50+=-g-@#s5-jjgg)s4jb3h_hpde0#t#x_4u@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['stock-ecom.smarcrib.site', 'localhost']
+
+# Add  CSRF_TRUSTED_ORIGINS 
+CSRF_TRUSTED_ORIGINS = [
+    'https://stock-ecom.smarcrib.site',
+    'http://localhost:3000',]
 
 # Define the absolute path for STATIC_ROOT
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -112,27 +119,27 @@ WSGI_APPLICATION = 'StockEcomm.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('DB_USER'),
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': os.getenv('DB_HOST'),
-#         'PORT': '5432',  # Default to port 5432
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'Ecomm2'),
-        'USER': os.environ.get('DB_USER', 'MainAdmin'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'admin'),
-        'HOST': 'db', #change to db when in docker
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get('DB_NAME', 'Ecomm2'),
+#         'USER': os.environ.get('DB_USER', 'MainAdmin'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD', 'admin'),
+#         'HOST': 'db', #change to db when in docker
+#         'PORT': '5432',
+#     }
+# }
 
 
 
