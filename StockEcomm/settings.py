@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from django.conf import settings
+
 
 # Load .env file
 load_dotenv()  # This loads environment variables from the .env file
@@ -30,7 +32,12 @@ SECRET_KEY = 'django-insecure-wd12)3xu^923%50+=-g-@#s5-jjgg)s4jb3h_hpde0#t#x_4u@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['stock-ecom.smarcrib.site']
+ALLOWED_HOSTS = ['stock-ecom.smarcrib.site', 'localhost']
+
+# Add  CSRF_TRUSTED_ORIGINS 
+CSRF_TRUSTED_ORIGINS = [
+    'https://stock-ecom.smarcrib.site',
+    'http://localhost:3000',]
 
 # Define the absolute path for STATIC_ROOT
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
