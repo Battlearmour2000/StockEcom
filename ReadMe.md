@@ -1,89 +1,156 @@
-# Django REST Framework Setup
+# Django Stock E-commerce API
 
-## Prerequisites
+A Django REST Framework API for managing stock and e-commerce functionality.
 
-Before setting up the project locally, ensure you have the following installed on your system:
+## 🐳 Docker Deployment
 
-- [Python 3.x](https://www.python.org/downloads/)
-- [PostgreSQL](https://www.postgresql.org/download/)
-- [pip](https://pip.pypa.io/en/stable/installation/)
-- [Virtualenv](https://virtualenv.pypa.io/en/latest/installation.html) (recommended for managing dependencies in isolated environments)
+This project can be easily deployed using Docker. Here's how to get started:
 
-->Downloading PostgreSQL, follow the link and download the lastest windows installer. After installation the GUI admin dashboard "pgAdmin4" can be helpful to setup.
+### Prerequisites
 
-## Project Setup
+- [Docker](https://www.docker.com/get-started)
 
-### Step 1: Clone the Repository
+### Environment Setup
 
-Clone the project repository to your local machine using:
-
-```bash
-git clone <your-repository-url>
-cd <your-repository-directory>
-```
-
-### Step 2: Setup virtual environment
-On Windows
-```python
-python -m venv env
-env\Scripts\activate
-```
-
-### Step 3: Install dependencies
-```
-pip install -r requirements.txt
-```
-
-### Step 4: Configire PostgreSQL Database
-On terminal, run the command to access PostgresSQL
-```
-psql -U postgres
+Before building the Docker image, create a `.env` file in the project root with these variables:
 
 ```
-Once inside the PostgreSQL environment, you can run the following commands to create a database and a user:
-```
-CREATE DATABASE <your-database-name>;
-CREATE USER <your-username> WITH PASSWORD '<your-password>';
-GRANT ALL PRIVILEGES ON DATABASE <your-database-name> TO <your-username>;
-```
-After executing these commands, you can exit the PostgreSQL environment by typing ```\q.```
-
-Update the ```DATABASES``` configuration in the ```settings.py``` file of the Django project:
-
-1. Create a .env file and add the follwing details
-```
-# .env file
-DB_NAME=<database-name-here>
-DB_USER=<username-here>
-DB_PASSWORD=<password-here>
-DB_HOST=localhost
+DB_NAME=your_db_name
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_HOST=your_db_host
 DB_PORT=5432
 ```
-2. Update the settings.py file to use the .env file
-```
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': 'db',
-        'PORT': '5432',
-    }
-}
+
+### Quick Start with Docker
+
+1. **Build the Docker Image**
+
+   ```bash
+   docker build -t stock-ecomm .
+   ```
+
+2. **Run the Container**
+
+   ```bash
+   docker run -d -p 8000:8000 --env-file .env --name stock-ecomm-container stock-ecomm
+   ```
+
+3. **Access the Application**
+   The API will be available at `http://localhost:8000`
+
+### 🔑 Superuser Setup
+
+The Dockerfile automatically creates a default superuser with these credentials:
+
+- Username: admin
+- Email: admin@example.com
+- Password: admin
+
+To customize the superuser during build, use these build arguments:
+
+```bash
+docker build \
+  --build-arg DJANGO_SUPERUSER_USERNAME=your_username \
+  --build-arg DJANGO_SUPERUSER_EMAIL=your_email@example.com \
+  --build-arg DJANGO_SUPERUSER_PASSWORD=your_password \
+  -t stock-ecomm .
 ```
 
-### Step 5: Apply Migrations
-Once the database is configured, run the migrations to set up the tables:
-```
-python manage.py migrate
-```
+### 🔧 Docker Configuration
 
-### Step 6: Start the Development Server
-Run the Django development server:
-```
-python manage.py runserver
-```
+Our Dockerfile handles:
 
-Step 7: Access the API
-You can access the API endpoints via http://localhost:8000/ and follow the routes as per documentations
+- Setting up Python 3.10 environment
+- Installing PostgreSQL dependencies
+- Installing project dependencies
+- Running migrations automatically
+- Collecting static files
+- Creating a default superuser
+
+You don't need to manually:
+
+- Run migrations
+- Collect static files
+- Create a superuser
+
+### 🚀 Useful Docker Commands
+
+- **View logs:**
+
+  ```bash
+  docker logs stock-ecomm-container
+  ```
+
+- **Execute commands in the container:**
+
+  ```bash
+  docker exec -it stock-ecomm-container python manage.py command_name
+  ```
+
+- **Stop the container:**
+  ```bash
+  docker stop stock-ecomm-container
+  ```
+
+## 💻 Local Development Setup
+
+If you prefer to run the application locally without Docker:
+
+1. **Clone the repository**
+
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   ```
+
+2. **Set up a virtual environment**
+
+   ```bash
+   python -m venv env
+   source env/bin/activate  # On Windows: env\Scripts\activate
+   ```
+
+3. **Install dependencies**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Set up environment variables**
+   Create a `.env` file as described in the Docker section.
+
+5. **Run migrations**
+
+   ```bash
+   python manage.py migrate
+   ```
+
+6. **Create a superuser**
+
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+7. **Start the development server**
+   ```bash
+   python manage.py runserver
+   ```
+
+## 📋 API Documentation
+
+API documentation can be found at:
+
+- Swagger UI: `/api/schema/swagger-ui/`
+- ReDoc: `/api/schema/redoc/`
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a new branch
+3. Make your changes
+4. Submit a pull request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
