@@ -29,6 +29,12 @@ RUN python manage.py migrate
 # Collect static files (if needed)
 RUN python manage.py collectstatic --noinput
 
+# Create a superuser
+ARG DJANGO_SUPERUSER_USERNAME=admin
+ARG DJANGO_SUPERUSER_EMAIL=admin@example.com
+ARG DJANGO_SUPERUSER_PASSWORD=admin
+RUN python manage.py createsuperuser --noinput --username $DJANGO_SUPERUSER_USERNAME --email $DJANGO_SUPERUSER_EMAIL || true
+
 # Expose the port the app runs on
 EXPOSE 8000
 
