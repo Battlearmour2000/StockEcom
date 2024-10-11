@@ -1,5 +1,4 @@
 .env
 venv/
 product_images/
-Dockerfile
 docker-compose.yml
