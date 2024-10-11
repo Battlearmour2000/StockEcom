@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-wd12)3xu^923%50+=-g-@#s5-jjgg)s4jb3h_hpde0#t#x_4u@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['stock-ecom.smarcrib.site']
 
 # Define the absolute path for STATIC_ROOT
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
